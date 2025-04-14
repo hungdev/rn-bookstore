@@ -1,20 +1,11 @@
 import React, {useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import {View, Text, Image, FlatList, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 
-const DATA = Array(10)
-  .fill()
-  .map((_, index) => ({
-    id: index,
-    title: 'The Beach House',
-    author: 'Mary Alice',
-    price: 12.99,
-    quantity: 1,
-    image: 'https://m.media-amazon.com/images/I/51NiGlapXlL._SY291_BO1,204,203,200_QL40_FMwebp_.jpg',
-  }));
-
 const CartScreen = ({navigation}) => {
-  const [cartItems, setCartItems] = useState(DATA);
+  const [cartItems, setCartItems] = useState();
+  const productList = useSelector(state => state.product.products);
 
   const increaseQuantity = id => {
     setCartItems(cartItems.map(item => (item.id === id ? {...item, quantity: item.quantity + 1} : item)));
@@ -27,7 +18,8 @@ const CartScreen = ({navigation}) => {
   };
 
   const getTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+    // return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+    return 10;
   };
 
   const removeItem = id => {
@@ -38,26 +30,26 @@ const CartScreen = ({navigation}) => {
     <View style={styles.container}>
       <FlatList
         style={styles.list}
-        data={cartItems}
+        data={productList}
         keyExtractor={item => item.id}
         renderItem={({item}) => (
           <View style={styles.cartItem}>
-            <Image source={{uri: item.image}} style={styles.bookImage} />
+            <Image source={{uri: item?.image}} style={styles.bookImage} />
             <View style={styles.itemDetails}>
-              <Text style={styles.bookTitle}>{item.title}</Text>
-              <Text style={styles.bookAuthor}>By {item.author}</Text>
-              <Text style={styles.bookPrice}>${item.price.toFixed(2)}</Text>
+              <Text style={styles.bookTitle}>{item?.title}</Text>
+              <Text style={styles.bookAuthor}>By {item?.author}</Text>
+              <Text style={styles.bookPrice}>${item?.price}</Text>
               <View style={styles.quantityContainer}>
                 <TouchableOpacity onPress={() => decreaseQuantity(item.id)} style={styles.quantityButton}>
                   <Ionicons name="remove-circle-outline" size={24} color="#4A80F0" />
                 </TouchableOpacity>
-                <Text style={styles.quantityText}>{item.quantity}</Text>
+                <Text style={styles.quantityText}>{item?.quantity}</Text>
                 <TouchableOpacity
-                  onPress={() => increaseQuantity(item.id)}
+                  onPress={() => increaseQuantity(item?.id)}
                   style={[styles.quantityButton, {marginRight: 'auto'}]}>
                   <Ionicons name="add-circle-outline" size={24} color="#4A80F0" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => removeItem(item.id)} style={styles.trashIcon}>
+                <TouchableOpacity onPress={() => removeItem(item?.id)} style={styles.trashIcon}>
                   <Ionicons name="trash-outline" size={24} color="gray" />
                 </TouchableOpacity>
               </View>

@@ -15,11 +15,14 @@ import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 // https://restful-api-vercel-pied.vercel.app/bookshelf
 // Horizontal Book Item Component
-const HorizontalBookItem = ({title, author, coverUrl}) => {
+const HorizontalBookItem = props => {
+  const {id, title, author, image} = props;
   const navigation = useNavigation();
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Detail')} style={styles.horizontalBookItem}>
-      <Image source={{uri: coverUrl}} style={styles.bookCover} />
+    <TouchableOpacity
+      onPress={() => navigation.navigate('Detail', {productDetail: props})}
+      style={styles.horizontalBookItem}>
+      <Image source={{uri: image}} style={styles.bookCover} />
       <Text numberOfLines={1} style={styles.bookTitle}>
         {title}
       </Text>
@@ -31,10 +34,13 @@ const HorizontalBookItem = ({title, author, coverUrl}) => {
 };
 
 // Vertical Book Item Component for Bookshelf
-const VerticalBookItem = ({title, author, image}) => {
+const VerticalBookItem = props => {
+  const {id, title, author, coverUrl, image} = props;
   const navigation = useNavigation();
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Detail')} style={styles.verticalBookItem}>
+    <TouchableOpacity
+      onPress={() => navigation.navigate('Detail', {productDetail: props})}
+      style={styles.verticalBookItem}>
       <Image source={{uri: image}} style={styles.bookCover} />
       <View style={styles.bookDetails}>
         <Text numberOfLines={1} style={styles.bookTitle}>
@@ -53,77 +59,6 @@ const BookApp = () => {
   // Sample book data
   const sampleCoverUrl =
     'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721918653l/198902277.jpg';
-
-  const readingBooks = [
-    {
-      title: 'The Beach House',
-      author: 'Mary Alice Monroe',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'The life-changing magic of tidying up',
-      author: 'Marie Kondō',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'Sold on a Monday',
-      author: 'Kristina Morris',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'The life-changing magic of tidying up',
-      author: 'Marie Kondō',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'Sold on a Monday',
-      author: 'Kristina Morris',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'The life-changing magic of tidying up',
-      author: 'Marie Kondō',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'Sold on a Monday',
-      author: 'Kristina Morris',
-      coverUrl: sampleCoverUrl,
-    },
-  ];
-
-  const bookshelfBooks = [
-    {
-      title: 'The Orphan Sisters',
-      author: 'Shirley Dickson',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'Daughters of War',
-      author: 'Lizzie Page',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'The Runaway Children',
-      author: 'Sandy Taylor',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'Sprint',
-      author: 'Jake Knapp',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'Contagious',
-      author: 'Jonah Berger',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'The Pieces We Keep',
-      author: 'Kristina McMorris',
-      coverUrl: sampleCoverUrl,
-    },
-  ];
 
   useEffect(() => {
     // Fetch data from API
@@ -154,7 +89,7 @@ const BookApp = () => {
         </View>
 
         <FlatList
-          data={readingBooks}
+          data={bookshelf}
           keyExtractor={(item, index) => `reading-${index}`}
           renderItem={({item}) => <HorizontalBookItem {...item} />}
           horizontal

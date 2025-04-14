@@ -1,8 +1,18 @@
 import React from 'react';
 import {View, Text, Image, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
+import {useSelector, useDispatch} from 'react-redux';
+import {addProduct} from '../store/productSlice';
 
-const BookDetailsScreen = ({navigation}) => {
+const BookDetailsScreen = ({navigation, route}) => {
+  const {productDetail} = route.params;
+  const dispatch = useDispatch();
+  console.log('productDetail', productDetail);
+
+  const onAddCart = () => {
+    dispatch(addProduct(productDetail));
+    navigation.navigate('Cart');
+  };
   return (
     <ScrollView style={styles.container}>
       {/* Book info section */}
@@ -12,8 +22,8 @@ const BookDetailsScreen = ({navigation}) => {
           style={styles.bookCover}
         />
         <View style={styles.bookDetails}>
-          <Text style={styles.bookTitle}>The Pieces We Keep</Text>
-          <Text style={styles.bookAuthor}>By Kristina McMorris</Text>
+          <Text style={styles.bookTitle}>{productDetail?.title}</Text>
+          <Text style={styles.bookAuthor}>{productDetail?.author}</Text>
 
           <View style={styles.categoriesContainer}>
             <View style={styles.categoryBadge}>
@@ -33,7 +43,7 @@ const BookDetailsScreen = ({navigation}) => {
             <Text style={styles.ratingText}>4.5 (268)</Text>
           </View>
 
-          <Text style={styles.priceText}>$7.50</Text>
+          <Text style={styles.priceText}>${productDetail?.price}</Text>
         </View>
       </View>
 
@@ -104,7 +114,7 @@ const BookDetailsScreen = ({navigation}) => {
           <Text style={styles.freeTrialText}>Free trials</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('Cart')} style={styles.buyNowButton}>
+        <TouchableOpacity onPress={onAddCart} style={styles.buyNowButton}>
           <Text style={styles.buyNowText}>Buy Now</Text>
         </TouchableOpacity>
       </View>
