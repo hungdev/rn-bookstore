@@ -2,19 +2,23 @@ import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {View, Text, Image, FlatList, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
+import {increaseQty, decreaseQty, removeItem} from '../store/productSlice';
 
 const CartScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const [cartItems, setCartItems] = useState();
   const productList = useSelector(state => state.product.products);
 
   const increaseQuantity = id => {
-    setCartItems(cartItems.map(item => (item.id === id ? {...item, quantity: item.quantity + 1} : item)));
+    // setCartItems(cartItems.map(item => (item.id === id ? {...item, quantity: item.quantity + 1} : item)));
+    dispatch(increaseQty(id));
   };
 
   const decreaseQuantity = id => {
-    setCartItems(
-      cartItems.map(item => (item.id === id && item.quantity > 1 ? {...item, quantity: item.quantity - 1} : item)),
-    );
+    // setCartItems(
+    //   cartItems.map(item => (item.id === id && item.quantity > 1 ? {...item, quantity: item.quantity - 1} : item)),
+    // );
+    dispatch(decreaseQty(id));
   };
 
   const getTotalPrice = () => {
@@ -22,8 +26,9 @@ const CartScreen = ({navigation}) => {
     return 10;
   };
 
-  const removeItem = id => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+  const onRemoveItem = id => {
+    // setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+    dispatch(removeItem(id));
   };
 
   return (
@@ -49,7 +54,7 @@ const CartScreen = ({navigation}) => {
                   style={[styles.quantityButton, {marginRight: 'auto'}]}>
                   <Ionicons name="add-circle-outline" size={24} color="#4A80F0" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => removeItem(item?.id)} style={styles.trashIcon}>
+                <TouchableOpacity onPress={() => onRemoveItem(item?.id)} style={styles.trashIcon}>
                   <Ionicons name="trash-outline" size={24} color="gray" />
                 </TouchableOpacity>
               </View>

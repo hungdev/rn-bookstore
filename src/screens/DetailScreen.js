@@ -10,9 +10,11 @@ const BookDetailsScreen = ({navigation, route}) => {
   console.log('productDetail', productDetail);
 
   const onAddCart = () => {
-    dispatch(addProduct(productDetail));
+    dispatch(addProduct({...productDetail, quantity: 1}));
     navigation.navigate('Cart');
   };
+
+  const onAddFavorite = () => {};
   return (
     <ScrollView style={styles.container}>
       {/* Book info section */}
@@ -110,8 +112,8 @@ const BookDetailsScreen = ({navigation, route}) => {
 
       {/* Action buttons */}
       <View style={styles.actionButtonsContainer}>
-        <TouchableOpacity style={styles.freeTrialButton}>
-          <Text style={styles.freeTrialText}>Free trials</Text>
+        <TouchableOpacity style={styles.freeTrialButton} onPress={onAddFavorite}>
+          <Text style={styles.freeTrialText}>Favorite</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={onAddCart} style={styles.buyNowButton}>
