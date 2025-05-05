@@ -1,10 +1,18 @@
 import React, {useState} from 'react';
 import {SafeAreaView, View, Text, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import {setLogin} from '../store/userSlice';
 
 const LoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('Limpitsouni');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const handleLogin = () => {
+    dispatch(setLogin());
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,7 +63,7 @@ const LoginScreen = ({navigation}) => {
       </View>
       <View style={styles.action}>
         {/* Login Button */}
-        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.replace('Main')}>
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.loginButtonText}>Log In</Text>
         </TouchableOpacity>
 

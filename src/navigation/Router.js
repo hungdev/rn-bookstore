@@ -11,6 +11,7 @@ import CommentScreen from '../screens/CommentScreen';
 import CartScreen from '../screens/CartScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import Ionicons from '@react-native-vector-icons/ionicons';
+import {useSelector, useDispatch} from 'react-redux';
 
 const getTabBarIcon = (route, focused, size) => {
   let iconName;
@@ -130,11 +131,15 @@ function MainStackScreen() {
 
 // App Navigator
 export default function App() {
+  const isLogged = useSelector(state => state.user.isLogged);
   return (
     <NavigationContainer>
       <AuthStack.Navigator>
-        <AuthStack.Screen name="Main" component={MainStackScreen} options={{headerShown: false}} />
-        <AuthStack.Screen name="Auth" component={AuthStackScreen} options={{headerShown: false}} />
+        {!isLogged ? (
+          <AuthStack.Screen name="Auth" component={AuthStackScreen} options={{headerShown: false}} />
+        ) : (
+          <AuthStack.Screen name="Main" component={MainStackScreen} options={{headerShown: false}} />
+        )}
       </AuthStack.Navigator>
     </NavigationContainer>
   );
